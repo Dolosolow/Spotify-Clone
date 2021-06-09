@@ -1,0 +1,12 @@
+{
+  "name": "rn-anime",
+  "displayName": "rn-anime",
+  "expo": {
+    "name": "rn-anime",
+    "slug": "rn-anime",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
