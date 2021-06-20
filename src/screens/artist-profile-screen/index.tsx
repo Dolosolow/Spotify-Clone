@@ -1,0 +1,1 @@
+export { ArtistProfileScreen } from "./ArtistProfileScreen";

@@ -5,8 +5,7 @@
     "name": "rn-anime",
     "slug": "rn-anime",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "orientation": "portrait",
+    "assetBundlePatterns": ["**/*"]
   }
 }

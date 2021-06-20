@@ -1,76 +1,32 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { View, Text } from "react-native";
-import AntDesign from "react-native-vector-icons/AntDesign";
 
-import { HomeScreen } from "../screens/HomeScreen";
-import { TabBar } from "./TabBar";
+import { TabRoutes } from "./TabRoutes";
+import { ModalRoutes } from "./ModalRoutes";
 
-type RParams = {
-  home: {
-    hide: boolean;
-  };
-  settings: undefined;
-  messages: undefined;
-  trips: undefined;
-  wishlists: undefined;
-};
+import type { RPList } from "@local/routes/routes-params-list";
 
-const Stack = createStackNavigator();
-const StackBtm = createBottomTabNavigator<RParams>();
+const Stack = createStackNavigator<RPList>();
 
-import ReAnimated from "react-native-reanimated";
-const { Value } = ReAnimated;
-
-const RootRoute = () => {
+const RootRoutes = () => {
   return (
-    <Stack.Navigator headerMode="none" initialRouteName="home">
-      <Stack.Screen name="home" component={HomeScreen} />
-    </Stack.Navigator>
-  );
-};
-
-const RootTabRoute = () => {
-  const yPosition = new Value<number>(0);
-
-  return (
-    <StackBtm.Navigator
-      initialRouteName="home"
-      tabBar={(props) => <TabBar {...props} yPosition={yPosition} />}
+    <Stack.Navigator
+      mode="modal"
+      headerMode="none"
+      initialRouteName={"Tabs"}
+      screenOptions={{ cardStyle: { borderTopLeftRadius: 40, borderTopRightRadius: 40 } }}
     >
-      <StackBtm.Screen name="home">
-        {(props) => <HomeScreen {...props} yPosition={yPosition} />}
-      </StackBtm.Screen>
-      <StackBtm.Screen name="settings" component={HomeScreen} />
-      <StackBtm.Screen name="messages" component={HomeScreen} />
-      <StackBtm.Screen name="trips" component={HomeScreen} />
-      <StackBtm.Screen name="wishlists" component={HomeScreen} />
-    </StackBtm.Navigator>
+      <Stack.Screen name="Tabs" component={TabRoutes} />
+      <Stack.Screen name="Modals" component={ModalRoutes} />
+    </Stack.Navigator>
   );
 };
 
 export const Routes = () => {
   return (
     <NavigationContainer>
-      {/* <RootRoute /> */}
-      <RootTabRoute />
+      <RootRoutes />
     </NavigationContainer>
   );
 };
-
-{
-  /* <StackBtm.Navigator
-      initialRouteName="home"
-      tabBar={(props) => <TabBar {...props} yPosition={yPosition} />}
-    >
-      <StackBtm.Screen name="home" >
-        {(props) => <HomeScreen {...props} yPosition={yPosition} />}
-      </StackBtm.Screen>
-      <StackBtm.Screen name="settings" component={HomeScreen} />
-      <StackBtm.Screen name="messages" component={HomeScreen} />
-      <StackBtm.Screen name="trips" component={HomeScreen} />
-      <StackBtm.Screen name="wishlists" component={HomeScreen} />
-    </StackBtm.Navigator> */
-}

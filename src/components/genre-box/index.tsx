@@ -1,0 +1,1 @@
+export { GenreBox } from "./GenreBox";
