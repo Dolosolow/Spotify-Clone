@@ -7,10 +7,11 @@ import { NamedRow } from "@local/components/named-row";
 import { GenreBox } from "@local/components/genre-box";
 
 import { getMostPlayed } from "@local/utils/getMostPlayed";
+import type { Playlist } from "@local/types/index";
 import { styles } from "./styles";
 
 interface GCBProps {
-  playlistData: Array<any>;
+  playlistData: Playlist[];
   yOffset: Animated.Value<number>;
 }
 
@@ -29,7 +30,7 @@ export const GenreChannelBlocks = ({ yOffset, playlistData }: GCBProps) => {
           <GenreBox
             key={idx}
             color={filtered ? playlistData[playlist.idx].color : playlist.color}
-            title={filtered ? playlistData[playlist.idx].playlistName : playlist.playlistName}
+            title={filtered ? playlistData[playlist.idx].name : playlist.name}
             source={filtered ? playlistData[playlist.idx].cover : playlist.cover}
           />
         ))}

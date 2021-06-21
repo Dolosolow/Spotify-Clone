@@ -9,11 +9,13 @@ module.exports = function (api) {
         {
           root: ["."],
           alias: {
+            "@local/assets": "./assets",
             "@local/components": "./src/components",
             "@local/routes": "./src/routes",
             "@local/screens": "./src/screens",
+            "@local/store": "./src/store",
+            "@local/types": "./src/types",
             "@local/utils": "./src/utils",
-            "@local/assets": "./assets",
           },
         },
       ],

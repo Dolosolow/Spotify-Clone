@@ -2,10 +2,11 @@ import React from "react";
 import { View, Text, Pressable } from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 
+import { Track } from "@local/types/index";
 import { styles } from "./styles";
 
 interface TIProps {
-  track: { id: string; title: string; artist: string[]; cover: any; vid: any; mp3: any };
+  track: Track;
   onTrackPress: () => void;
 }
 
@@ -14,7 +15,7 @@ export const TrackItem = ({ track, onTrackPress }: TIProps) => (
     <View style={styles.track}>
       <View>
         <Text adjustsFontSizeToFit style={styles.text}>
-          {track.title}
+          {track.name}
         </Text>
         <Text adjustsFontSizeToFit style={styles.subText}>
           {track.artist.join(", ")}

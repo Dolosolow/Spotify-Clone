@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Animated from "react-native-reanimated";
 import { easeGradient } from "react-native-easing-gradient";
 import { View, Dimensions } from "react-native";
@@ -15,11 +15,12 @@ import { Topbar } from "@local/components/top-bar";
 import { TrackItem } from "@local/components/track-item";
 
 import type { RPList } from "@local/routes/routes-params-list";
+import type { Track } from "@local/types/index";
 
 import { styles } from "./styles";
 
 interface TLProps {
-  data: any[];
+  data: Track[];
   yOffset: Animated.Value<number>;
   navigation: StackNavigationProp<RPList, "Home">;
 }
@@ -27,8 +28,14 @@ interface TLProps {
 const { height } = Dimensions.get("screen");
 
 export const PlaylistScreen = ({ data, navigation, yOffset }: TLProps) => {
-  const [tracks, setTracks] = useState<any>({ list: data });
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [filteredSearch, setFilteredSearch] = useState("");
+
+  useEffect(() => {
+    if (!tracks.length && data.length) {
+      setTracks(data);
+    }
+  }, [data]);
 
   const handleItemPress = async (id: string) => {
     navigation.navigate("Modals", { screen: "Player", params: { songId: id } });
@@ -38,7 +45,7 @@ export const PlaylistScreen = ({ data, navigation, yOffset }: TLProps) => {
     let filteredTracks = data;
 
     filteredTracks = filteredTracks.filter((track) =>
-      track.title.toLowerCase().includes(text.toLowerCase())
+      track.name.toLowerCase().includes(text.toLowerCase())
     );
 
     if (!filteredTracks.length) {
@@ -48,7 +55,7 @@ export const PlaylistScreen = ({ data, navigation, yOffset }: TLProps) => {
     }
 
     setFilteredSearch(text);
-    setTracks({ list: filteredTracks });
+    setTracks(filteredTracks);
   };
 
   const renderPlaylistItems = () => {
@@ -82,7 +89,7 @@ export const PlaylistScreen = ({ data, navigation, yOffset }: TLProps) => {
         onChangeText={handleTermSearch}
       />
       <FlatTrackList
-        data={tracks}
+        data={{ list: tracks }}
         yOffset={yOffset}
         contentContainerStyle={{ minHeight: height, backgroundColor: "#121212" }}
         ListEmptyComponent={

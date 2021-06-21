@@ -1,7 +1,10 @@
-export default [
+import { Track } from "@local/types/index";
+
+const data: Track[] = [
   {
     id: "0",
-    title: "Starboy",
+    type: "track",
+    name: "Starboy",
     artist: ["The Weeknd"],
     cover: require("../images/artists/weeknd.jpeg"),
     vid: require("../videos/14.mov"),
@@ -9,7 +12,8 @@ export default [
   },
   {
     id: "1",
-    title: "La Playa",
+    type: "track",
+    name: "La Playa",
     artist: ["Myke Towers"],
     cover: require("../images/artists/myketowers.jpeg"),
     vid: require("../videos/0.mov"),
@@ -17,7 +21,8 @@ export default [
   },
   {
     id: "2",
-    title: "Vete",
+    type: "track",
+    name: "Vete",
     artist: ["Bad Bunny"],
     cover: require("../images/artists/badbunny.jpeg"),
     vid: require("../videos/7.mov"),
@@ -25,7 +30,8 @@ export default [
   },
   {
     id: "3",
-    title: "Life is Good",
+    type: "track",
+    name: "Life is Good",
     artist: ["Drake", "Future"],
     cover: require("../images/artists/drake.jpeg"),
     vid: require("../videos/11.mov"),
@@ -33,7 +39,8 @@ export default [
   },
   {
     id: "4",
-    title: "Adicto",
+    type: "track",
+    name: "Adicto",
     artist: ["Anuel AA", "Ozuna"],
     cover: require("../images/artists/aunelozuna.png"),
     vid: require("../videos/8.mov"),
@@ -41,7 +48,8 @@ export default [
   },
   {
     id: "5",
-    title: "No Me Conoces - Remix",
+    type: "track",
+    name: "No Me Conoces - Remix",
     artist: ["Jhay Cortez", "J Balvin", "Bad Bunny"],
     cover: require("../images/artists/jhaycortez.jpeg"),
     vid: require("../videos/1.mov"),
@@ -49,7 +57,8 @@ export default [
   },
   {
     id: "6",
-    title: "Blinding Lights",
+    type: "track",
+    name: "Blinding Lights",
     artist: ["The Weeknd"],
     cover: require("../images/artists/weeknd.jpeg"),
     vid: require("../videos/13.mov"),
@@ -57,7 +66,8 @@ export default [
   },
   {
     id: "7",
-    title: "Go Crazy",
+    type: "track",
+    name: "Go Crazy",
     artist: ["Chris Brown"],
     cover: require("../images/artists/chrisbrown.jpeg"),
     vid: require("../videos/15.mov"),
@@ -65,7 +75,8 @@ export default [
   },
   {
     id: "8",
-    title: "No guidance",
+    type: "track",
+    name: "No guidance",
     artist: ["Chris Brown", "Drake"],
     cover: require("../images/artists/chrisbrown.jpeg"),
     vid: require("../videos/16.mov"),
@@ -73,7 +84,8 @@ export default [
   },
   {
     id: "9",
-    title: "Que Pretendes",
+    type: "track",
+    name: "Que Pretendes",
     artist: ["Bad Bunny", "Jhay Cortez"],
     cover: require("../images/artists/badbunny.jpeg"),
     vid: require("../videos/10.mov"),
@@ -81,10 +93,13 @@ export default [
   },
   {
     id: "10",
-    title: "Como se siente",
+    type: "track",
+    name: "Como se siente",
     artist: ["Jhay Cortez"],
     cover: require("../images/artists/jhaycortez.jpeg"),
     vid: require("../videos/9.mov"),
     mp3: require("../audio/como_se_siente.mp3"),
   },
 ];
+
+export default data;

@@ -8,7 +8,9 @@
       "@local/routes/*": ["./src/routes/*"],
       "@local/screens/*": ["./src/screens/*"],
       "@local/utils/*": ["./src/utils/*"],
-      "@local/assets/*": ["./assets/*"]
+      "@local/assets/*": ["./assets/*"],
+      "@local/types/*": ["./src/types/*"],
+      "@local/store/*": ["./src/store/*"]
     }
   }
 }

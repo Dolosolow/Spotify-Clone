@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Animated from "react-native-reanimated";
 import { easeGradient } from "react-native-easing-gradient";
+import { useSelector, useDispatch } from "react-redux";
 import { View } from "react-native";
 import type { StackScreenProps } from "@react-navigation/stack";
 
@@ -12,15 +13,30 @@ import { ShuffleMiniButton } from "@local/components/shuffle-button";
 import { TrackItem } from "@local/components/track-item";
 import { Topbar } from "@local/components/top-bar";
 
-import { RPList } from "@local/routes/routes-params-list";
-import { styles } from "./styles";
+import { getArtist } from "@local/store/actions";
+import type { Store } from "@local/store/redux_store";
+import type { RPList } from "@local/routes/routes-params-list";
+import type { Artist, Track } from "@local/types/index";
 
-import artistsData from "@local/assets/data/artists";
-import musicData from "@local/assets/data/music";
+import { styles } from "./styles";
 
 export const ArtistProfileScreen = (props: StackScreenProps<RPList, "Artist">) => {
   const yOffset = new Animated.Value<number>(0);
-  const [data, setData] = useState<any>({});
+
+  const { data: artistData } = useSelector((state: Store) => state);
+  const [data, setData] = useState<Artist | null>(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getArtist(props.route.params.artistId));
+  }, []);
+
+  useEffect(() => {
+    if (artistData[0].id === props.route.params.artistId) {
+      setData(artistData[0] as Artist);
+    }
+  }, [artistData]);
 
   const handleItemPress = async (id: string) => {
     props.navigation.navigate("Modals", { screen: "Player", params: { songId: id } });
@@ -38,41 +54,29 @@ export const ArtistProfileScreen = (props: StackScreenProps<RPList, "Artist">) =
       },
     });
 
-    return (
-      <View style={styles.headComponentProfileContainer}>
-        <GradientOverlay colors={colors} locations={locations} />
-        <ListHeaderWrapper
-          yOffset={yOffset}
-          title={data && data.artistName}
-          titleFontSize="3.6rem"
-          subText="8,090,623 monthly listeners"
-        />
-        <ShuffleMiniButton />
-      </View>
-    );
+    if (data) {
+      return (
+        <View style={styles.headComponentProfileContainer}>
+          <GradientOverlay colors={colors} locations={locations} />
+          <ListHeaderWrapper
+            yOffset={yOffset}
+            title={data.name}
+            titleFontSize="3.6rem"
+            subText="8,090,623 monthly listeners"
+          />
+          <ShuffleMiniButton />
+        </View>
+      );
+    }
   };
-
-  useEffect(() => {
-    const artist = artistsData.find((artist) => artist.id === props.route.params.artistId);
-    let fetchedData;
-
-    const filteredTracks = artist?.songs.map((trackId) => {
-      const foundMusic = musicData.find((track) => track.id === trackId);
-      if (foundMusic) return foundMusic;
-    });
-
-    fetchedData = Object.assign({ ...artist }, { list: filteredTracks });
-
-    setData(fetchedData);
-  }, []);
 
   return (
     <View style={{ backgroundColor: "#121212", flex: 1 }}>
-      <HeaderCover isArtistProfile coverImg={data.cover} yOffset={yOffset} />
-      <Topbar yOffset={yOffset} title={data.artistName} />
+      <HeaderCover isArtistProfile coverImg={data?.cover} yOffset={yOffset} />
+      <Topbar yOffset={yOffset} title={data?.name || ""} />
       <FlatTrackList
         yOffset={yOffset}
-        data={data}
+        data={{ list: data?.songs as Track[] }}
         ListHeaderComponent={renderArtistProfile()}
         renderItem={({ item }) => (
           <TrackItem track={item} onTrackPress={() => handleItemPress(item.id)} />

@@ -1,28 +1,60 @@
 import React, { useState, useEffect } from "react";
 import Animated from "react-native-reanimated";
 import { View } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import type { StackScreenProps } from "@react-navigation/stack";
 
 import { SearchInput } from "@local/components/search-input";
 import { FlatTrackList } from "@local/components/flat-track-list";
 import { EmptyListMessage } from "@local/components/empty-list-message";
 import { SearchItem } from "./search-item";
+
+import { getData } from "@local/store/actions";
 import type { RPList } from "@local/routes/routes-params-list";
-
-import artistsData from "@local/assets/data/artists";
-import musicData from "@local/assets/data/music";
-
+import type { Store } from "@local/store/redux_store";
+import type { AllData } from "@local/types/index";
 import { styles } from "./styles";
 
 export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResults">) => {
   const yOffset = new Animated.Value<number>(0);
+  const { data } = useSelector((state: Store) => state);
+  const dispatch = useDispatch();
 
-  const [data, setData] = useState<any>({ list: [] });
   const [term, setTerm] = useState("");
+  const [allData, setAllData] = useState<AllData>([]);
+  const [filteredData, setFilteredData] = useState<any>([]);
+
+  useEffect(() => {
+    dispatch(getData());
+  }, []);
+
+  useEffect(() => {
+    setAllData(data);
+  }, [data]);
+
+  useEffect(() => {
+    const results: any[] = [];
+
+    if (term.length) {
+      results.push(
+        ...allData.filter((track) => track.name.toLowerCase().includes(term.toLowerCase()))
+      );
+    }
+
+    setFilteredData(results);
+  }, [term]);
 
   const handleCancelBtn = () => {
     setTerm("");
     props.navigation.goBack();
+  };
+
+  const handleItemPress = (id: string, type: "song" | "artist") => {
+    if (type === "artist") {
+      props.navigation.navigate("Artist", { artistId: id });
+    } else {
+      props.navigation.navigate("Player", { songId: id });
+    }
   };
 
   const renderEmptyListMessage = () => {
@@ -43,40 +75,6 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
     }
   };
 
-  const handleItemPress = (id: string, type: "song" | "artist") => {
-    if (type === "artist") {
-      props.navigation.navigate("Artist", { artistId: id });
-    } else {
-      props.navigation.navigate("Player", { songId: id });
-    }
-  };
-
-  useEffect(() => {
-    const results: any[] = [];
-
-    if (term.length) {
-      results.push(
-        ...musicData.filter((track) => track.title.toLowerCase().includes(term.toLowerCase()))
-      );
-
-      if (results.length) {
-        results.push(
-          artistsData.find(
-            (artist) => artist.artistName.toLowerCase() === results[0].artist[0].toLowerCase()
-          )
-        );
-      } else {
-        results.push(
-          ...artistsData.filter((artist) =>
-            artist.artistName.toLowerCase().includes(term.toLowerCase())
-          )
-        );
-      }
-    }
-
-    setData({ list: results });
-  }, [term]);
-
   return (
     <View style={styles.searchResultsContainer}>
       <SearchInput
@@ -86,17 +84,17 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
         onCancel={handleCancelBtn}
       />
       <FlatTrackList
-        data={data}
+        data={{ list: filteredData as AllData }}
         yOffset={yOffset}
-        enableScroll={data.list.length > 0}
+        enableScroll={allData.length > 0}
         contentContainerStyle={styles.searchResultsListContainer}
         ListEmptyComponent={renderEmptyListMessage()}
         renderItem={({ item }) => {
-          if (item.title) {
+          if (item.type === "track") {
             return (
               <SearchItem
                 type="song"
-                title={item.title}
+                title={item.name}
                 artists={item.artist}
                 onItemPress={() => handleItemPress(item.id, "song")}
               />
@@ -105,8 +103,8 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
             return (
               <SearchItem
                 type="artist"
-                title={item.artistName}
-                artists={[item.artistName]}
+                title={item.name}
+                artists={[item.name]}
                 coverImg={item.cover}
                 onItemPress={() => handleItemPress(item.id, "artist")}
               />
