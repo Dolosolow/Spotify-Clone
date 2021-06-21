@@ -6,6 +6,12 @@
     "slug": "rn-anime",
     "version": "1.0.0",
     "orientation": "portrait",
-    "assetBundlePatterns": ["**/*"]
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.jochy.rnanime"
+    },
+    "ios": {
+      "bundleIdentifier": "com.jochy.rnanime"
+    }
   }
 }

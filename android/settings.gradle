@@ -1,4 +1,4 @@
-rootProject.name = 'rnanime'
+rootProject.name = 'rn-anime'
 
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
 includeUnimodulesProjects()
