@@ -1,18 +1,33 @@
 {
   "images" : [
     {
-      "filename" : "X - 1-1.png",
+      "filename" : "iphonexr_splash_u.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "X - 1.png",
+      "filename" : "iphonex_splash_u.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "X - 1-2.png",
+      "filename" : "iphonexsmax_splash_u.png",
       "idiom" : "universal",
+      "scale" : "3x"
+    },
+    {
+      "filename" : "iphonexr_splash.png",
+      "idiom" : "iphone",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "iphonex_splash.png",
+      "idiom" : "iphone",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "iphonexsmax_splash.png",
+      "idiom" : "iphone",
       "scale" : "3x"
     }
   ],
