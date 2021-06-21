@@ -7,8 +7,8 @@ export const styles = EStyleSheet.create({
   btnContainer: {
     backgroundColor: "#1212127b",
     alignItems: "center",
-    justifyContent: "flex-end",
-    paddingTop: "1.1rem",
+    justifyContent: "space-between",
+    paddingTop: "7rem",
     paddingHorizontal: "2rem",
     position: "absolute",
     left: 0,
@@ -31,5 +31,10 @@ export const styles = EStyleSheet.create({
     marginLeft: 8,
     color: "#fafafa",
     fontSize: "1.2rem",
+  },
+  playerDetailsContainer: {
+    flexDirection: "column",
+    width: "100%",
+    alignItems: "center",
   },
 });

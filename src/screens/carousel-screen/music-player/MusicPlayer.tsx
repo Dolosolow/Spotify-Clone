@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Image } from "react-native";
 import type { FlatList } from "react-native";
 
+import { TopbarNav } from "@local/components/top-bar-nav";
 import { PlayerControllers } from "./player-controllers";
 import { TrackDetails } from "./track-details";
 import { TrackTimedProgress } from "./track-timed-progress";
@@ -61,13 +62,16 @@ export const MusicPlayer = (props: MPProps) => {
         style={[styles.btnContainer, { display: props.showCtrls ? "flex" : "none" }]}
         pointerEvents="box-none"
       >
-        <TrackDetails track={props.track} />
-        <TrackTimedProgress rtPosition={props.rtPosition} trackDuration={props.trackDuration} />
-        <PlayerControllers
-          onPlayPausePress={props.handleAudioPlay}
-          onBackPress={() => handleControlPress({ direction: "R" })}
-          onForwardPress={() => handleControlPress({ direction: "F" })}
-        />
+        <TopbarNav />
+        <View style={styles.playerDetailsContainer}>
+          <TrackDetails track={props.track} />
+          <TrackTimedProgress rtPosition={props.rtPosition} trackDuration={props.trackDuration} />
+          <PlayerControllers
+            onPlayPausePress={props.handleAudioPlay}
+            onBackPress={() => handleControlPress({ direction: "R" })}
+            onForwardPress={() => handleControlPress({ direction: "F" })}
+          />
+        </View>
       </View>
       {!props.showCtrls && (
         <View style={styles.overlayContainer}>

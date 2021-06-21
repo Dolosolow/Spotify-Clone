@@ -6,7 +6,6 @@ import type { ViewToken } from "react-native";
 
 import { Card } from "./card";
 import { MusicPlayer } from "./music-player";
-import { PlayerOverlay } from "./player-overlay";
 
 import { AudioPlayer } from "@local/utils/AudioPlayer";
 import { setCurrentIndex, pausePlayAudio } from "@local/store/actions";
@@ -112,19 +111,16 @@ export const CarouselScreen = ({ route }: StackScreenProps<RPList, "Player">) =>
         viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
       />
       {currentIndex !== null && (
-        <>
-          <MusicPlayer
-            controllerRef={controllerRef}
-            currentIndex={currentIndex}
-            numOfTracks={data.length}
-            rtPosition={rtPosition}
-            trackDuration={trackDuration}
-            track={data[currentIndex]}
-            showCtrls={showCtrls}
-            handleAudioPlay={handlePlayingState}
-          />
-          <PlayerOverlay track={data[currentIndex]} showCtrls={showCtrls} />
-        </>
+        <MusicPlayer
+          controllerRef={controllerRef}
+          currentIndex={currentIndex}
+          numOfTracks={data.length}
+          rtPosition={rtPosition}
+          trackDuration={trackDuration}
+          track={data[currentIndex]}
+          showCtrls={showCtrls}
+          handleAudioPlay={handlePlayingState}
+        />
       )}
     </View>
   );

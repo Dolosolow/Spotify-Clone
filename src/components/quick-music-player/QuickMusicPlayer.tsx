@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,6 +10,8 @@ import type { Store } from "@local/store/redux_store";
 import type { Track } from "@local/types/index";
 
 import { styles } from "./styles";
+
+import { RedirectButton } from "@local/components/redirect-button";
 
 const audioPlayer = AudioPlayer.getInstance();
 
@@ -38,6 +39,7 @@ export const QuickMusicPlayer = () => {
 
   return currentIndex && track ? (
     <View style={styles.playerContainer}>
+      <RedirectButton chevronDirection="up" />
       <TouchableWithoutFeedback
         onPress={() =>
           navigation.navigate("Modals", {
@@ -46,12 +48,11 @@ export const QuickMusicPlayer = () => {
           })
         }
       >
-        <AntDesign name="up" size={20} color="#fff" />
+        <View style={styles.playerTrackDetails}>
+          <Text style={styles.trackTitle}>{track.name}</Text>
+          <Text style={styles.trackSubTitle}>{track.artist.join(", ")}</Text>
+        </View>
       </TouchableWithoutFeedback>
-      <View style={styles.playerTrackDetails}>
-        <Text style={styles.trackTitle}>{track.name}</Text>
-        <Text style={styles.trackSubTitle}>{track.artist.join(", ")}</Text>
-      </View>
       <TouchableWithoutFeedback onPress={handlePlayingState}>
         <Ionicons
           name={isPlaying ? "pause-circle-outline" : "play-circle-outline"}
