@@ -9,7 +9,7 @@ export const TrackDetails = ({ track }: { track: any }) => {
 
   return (
     <View style={styles.trackDetails}>
-      <Text style={styles.trackDetailTitle}>{track.title}</Text>
+      <Text style={styles.trackDetailTitle}>{track.name}</Text>
       <Text style={styles.trackDetailArtists}>{track.artist.join(", ")}</Text>
       <TouchableOpacity style={styles.iconButton} onPress={() => setIsFavorited(!isFavorited)}>
         {isFavorited ? (

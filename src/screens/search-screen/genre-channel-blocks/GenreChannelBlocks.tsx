@@ -1,5 +1,6 @@
 import React from "react";
 import FeatherDesign from "react-native-vector-icons/Feather";
+import { useSelector } from "react-redux";
 import { ScrollView, View } from "react-native";
 import type Animated from "react-native-reanimated";
 
@@ -8,6 +9,8 @@ import { GenreBox } from "@local/components/genre-box";
 
 import { getMostPlayed } from "@local/utils/getMostPlayed";
 import type { Playlist } from "@local/types/index";
+import type { Store } from "@local/store/redux_store";
+
 import { styles } from "./styles";
 
 interface GCBProps {
@@ -16,9 +19,10 @@ interface GCBProps {
 }
 
 export const GenreChannelBlocks = ({ yOffset, playlistData }: GCBProps) => {
+  const currentIndex = useSelector((state: Store) => state.currentIndex);
+
   const renderMostPlayed = (listLength: number) => {
-    const mostPlayed = getMostPlayed(playlistData, "played", listLength);
-    return mostPlayed;
+    return getMostPlayed(playlistData, "played", listLength);
   };
 
   const renderPlayLists = (filtered: boolean = false) => {
@@ -41,7 +45,8 @@ export const GenreChannelBlocks = ({ yOffset, playlistData }: GCBProps) => {
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      scrollEventThrottle={16}
+      scrollEventThrottle={14}
+      contentContainerStyle={{ paddingBottom: currentIndex ? 50 : 0 }}
       onScroll={({ nativeEvent }) => {
         yOffset.setValue(nativeEvent.contentOffset.y);
       }}

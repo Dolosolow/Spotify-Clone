@@ -4,7 +4,7 @@ export const styles = EStyleSheet.create({
   trackDetails: {
     alignSelf: "flex-start",
     justifyContent: "space-between",
-    height: "5rem",
+    height: "4.3rem",
     width: "100%",
   },
   trackDetailTitle: {

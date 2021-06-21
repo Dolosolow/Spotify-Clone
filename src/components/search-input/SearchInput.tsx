@@ -16,7 +16,7 @@ interface SIProps {
 }
 
 export const SearchInput = ({ focusOnRender = false, ...props }: SIProps) => {
-  const { searchOpacity, topPosition } = getAnimatedNodes(props.yOffset ?? 0);
+  const { searchOpacity, topPosition } = getAnimatedNodes(props.yOffset || 0);
 
   const [inputValue, setInputValue] = useState("");
   const [hideCancelBtn, setHideCancelBtn] = useState(true);

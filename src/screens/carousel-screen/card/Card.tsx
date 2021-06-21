@@ -21,6 +21,7 @@ export const Card = ({ vid, onPress }: CProps) => {
         shouldPlay
         source={vid}
         resizeMode="cover"
+        rate={1.0}
         style={styles.cardVideo}
       />
     </Pressable>

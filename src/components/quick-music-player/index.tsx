@@ -1,0 +1,1 @@
+export { QuickMusicPlayer } from "./QuickMusicPlayer";

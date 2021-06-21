@@ -4,14 +4,17 @@ export const styles = EStyleSheet.create({
   controllersContainer: {
     flexDirection: "row",
     marginBottom: "10rem",
+    position: "relative",
+    width: "100%",
+    justifyContent: "center",
   },
   toggleLeftButton: {
-    left: -70,
-    top: 5,
     position: "absolute",
+    left: 20,
+    top: 5,
   },
   toggleRightButton: {
-    left: -70,
+    right: 20,
     top: 5,
     position: "absolute",
   },

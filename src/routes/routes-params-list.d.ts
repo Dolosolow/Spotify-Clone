@@ -7,6 +7,7 @@ type baseRNLParams = {
   };
   Player: {
     songId: string;
+    qplayer: boolean;
   };
   Search: undefined;
   SearchResults: undefined;
@@ -22,6 +23,7 @@ export type RPList = {
   };
   Player: {
     songId: string;
+    qplayer: boolean;
   };
   Search: undefined;
   SearchResults: undefined;

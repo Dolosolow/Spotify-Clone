@@ -10,17 +10,12 @@ export const getArtist = (id: string): ActionType => ({
   payload: id,
 });
 
-export const getTrack = (id: string): ActionType => ({
-  type: "GET_TRACK",
-  payload: id,
+export const setCurrentIndex = (index: number): ActionType => ({
+  type: "SET_CURRENT_INDEX",
+  payload: index,
 });
 
-export const setCurrentTrack = (id: string): ActionType => ({
-  type: "SET_CURRENT_TRACK",
-  payload: id,
-});
-
-export const pauseAudioTrack = (pause: boolean): ActionType => ({
-  type: "PAUSE_TRACK",
-  payload: pause,
+export const pausePlayAudio = (isPlaying: boolean): ActionType => ({
+  type: "PAUSE_PLAY_TRACK",
+  payload: isPlaying,
 });

@@ -21,21 +21,16 @@ import { styles } from "./styles";
 
 interface TLProps {
   data: Track[];
-  yOffset: Animated.Value<number>;
   navigation: StackNavigationProp<RPList, "Home">;
 }
 
 const { height } = Dimensions.get("screen");
 
-export const PlaylistScreen = ({ data, navigation, yOffset }: TLProps) => {
+const yOffset = new Animated.Value<number>(0);
+
+export const PlaylistScreen = ({ data, navigation }: TLProps) => {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [filteredSearch, setFilteredSearch] = useState("");
-
-  useEffect(() => {
-    if (!tracks.length && data.length) {
-      setTracks(data);
-    }
-  }, [data]);
 
   const handleItemPress = async (id: string) => {
     navigation.navigate("Modals", { screen: "Player", params: { songId: id } });
@@ -78,6 +73,12 @@ export const PlaylistScreen = ({ data, navigation, yOffset }: TLProps) => {
       </View>
     );
   };
+
+  useEffect(() => {
+    if (!tracks.length && data.length) {
+      setTracks(data);
+    }
+  }, [data]);
 
   return (
     <>

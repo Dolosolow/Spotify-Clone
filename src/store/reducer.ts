@@ -4,9 +4,8 @@ import type { Store, ActionType } from "./redux_store";
 const INITIAL_STATE: Store = {
   data: [],
   dataFiltered: undefined,
-  currentTrack: null,
+  currentIndex: null,
   isPlaying: false,
-  pauseTrack: false,
 };
 
 export const rootReducer = (state: Store = INITIAL_STATE, action: ActionType) => {
@@ -26,12 +25,16 @@ export const rootReducer = (state: Store = INITIAL_STATE, action: ActionType) =>
         ...state,
         data: [...artistData],
       };
-    case "GET_TRACK":
-      return state;
-    case "SET_CURRENT_TRACK":
-      return state;
-    case "PAUSE_TRACK":
-      return state;
+    case "SET_CURRENT_INDEX":
+      return {
+        ...state,
+        currentIndex: action.payload,
+      };
+    case "PAUSE_PLAY_TRACK":
+      return {
+        ...state,
+        isPlaying: action.payload,
+      };
     default:
       return state;
   }

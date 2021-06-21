@@ -1,29 +1,29 @@
 import React, { useRef, useState, useEffect } from "react";
 import { View, FlatList, Dimensions } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import type { StackScreenProps } from "@react-navigation/stack";
-import type { GestureResponderEvent, ViewToken } from "react-native";
+import type { ViewToken } from "react-native";
 
 import { Card } from "./card";
 import { MusicPlayer } from "./music-player";
 import { PlayerOverlay } from "./player-overlay";
 
 import { AudioPlayer } from "@local/utils/AudioPlayer";
+import { setCurrentIndex, pausePlayAudio } from "@local/store/actions";
 
-import musicData from "@local/assets/data/music";
 import type { RPList } from "@local/routes/routes-params-list";
+import type { Store } from "@local/store/redux_store";
+import type { Track } from "@local/types/index";
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get("screen");
 
-interface CSProps {
-  audioPlayer: AudioPlayer;
-}
+const audioPlayer = AudioPlayer.getInstance();
 
-export const CarouselScreen = (props: StackScreenProps<RPList, "Player"> & CSProps) => {
-  const { audioPlayer, route } = props;
+export const CarouselScreen = ({ route }: StackScreenProps<RPList, "Player">) => {
+  const { currentIndex, isPlaying, data } = useSelector((store: Store) => store);
+  const dispatch = useDispatch();
 
-  const [currentIndex, setCurrentIndex] = useState(Number(route.params.songId));
   const [showCtrls, setShowCtrls] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [rtPosition, setRtPosition] = useState(0);
   const [trackDuration, setTrackDuration] = useState(0);
 
@@ -31,68 +31,72 @@ export const CarouselScreen = (props: StackScreenProps<RPList, "Player"> & CSPro
 
   const onViewableItemsChange = useRef(
     async (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => {
-      const { id, mp3 } = musicData[info.viewableItems[0].index!];
+      const { id, mp3 } = data[info.viewableItems[0].index!] as Track;
 
-      setIsPlaying(false);
-      setCurrentIndex(Number(id));
+      if (currentIndex !== Number(id)) {
+        await audioPlayer.playNewAudio(mp3);
 
-      await audioPlayer.playNewAudio(mp3);
-      const audioDuration = await audioPlayer.getAudioDuration();
+        const audioDuration = await audioPlayer.getAudioDuration();
 
-      setTrackDuration(audioDuration);
-      setIsPlaying(true);
+        dispatch(pausePlayAudio(true));
+        dispatch(setCurrentIndex(Number(id)));
+        setTrackDuration(audioDuration);
+      }
     }
   );
 
-  const handleControlVisiability = (event: GestureResponderEvent) => {
+  const handlePlayingState = async () => {
+    if (isPlaying) {
+      dispatch(pausePlayAudio(false));
+      await audioPlayer.pauseAudio();
+    } else {
+      dispatch(pausePlayAudio(true));
+      await audioPlayer.playAudio(true);
+    }
+  };
+
+  const handleControlVisiability = () => {
     setShowCtrls((prevState) => !prevState);
   };
 
-  const handleAudioPlay = async () => {
-    if (!isPlaying) {
-      try {
-        await audioPlayer.playAudioAfterPause();
-        setIsPlaying(true);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      await audioPlayer.pauseAudio();
-      setIsPlaying(false);
-    }
-  };
+  useEffect(() => {
+    dispatch(setCurrentIndex(Number(route.params.songId)));
+  }, []);
 
   useEffect(() => {
-    if ((rtPosition / trackDuration) * 100 === 100) {
-      controllerRef.current?.scrollToIndex({ index: currentIndex + 1 });
-    }
-  }, [(rtPosition / trackDuration) * 100]);
-
-  useEffect(() => {
-    let timer: any;
-
     if (audioPlayer.audioPlayer._loaded) {
+      let timer: any;
+
       const getPosition = async () => {
-        const aPosition: any = await audioPlayer.getAudioPosition();
-        setRtPosition(aPosition);
+        const audioPosition = await audioPlayer.getAudioPosition();
+        setRtPosition(audioPosition);
+      };
+
+      const getDuration = async () => {
+        const audioDuration = await audioPlayer.getAudioDuration();
+        setTrackDuration(audioDuration);
       };
 
       timer = setTimeout(() => {
+        if (trackDuration === 0) {
+          getDuration();
+        }
+
         getPosition();
-      }, 500);
+      }, 1000);
 
       return () => {
         clearTimeout(timer);
       };
     }
-  }, [isPlaying, rtPosition]);
+  }, [isPlaying, rtPosition, route.params.qplayer]);
 
   return (
     <View style={{ backgroundColor: "#252525" }}>
       <FlatList
-        ref={controllerRef}
         horizontal
-        data={musicData}
+        ref={controllerRef}
+        data={data}
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => <Card vid={item.vid} onPress={handleControlVisiability} />}
         snapToAlignment="center"
@@ -107,19 +111,21 @@ export const CarouselScreen = (props: StackScreenProps<RPList, "Player"> & CSPro
         onViewableItemsChanged={onViewableItemsChange.current}
         viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
       />
-      <MusicPlayer
-        audioPlayer={audioPlayer}
-        controllerRef={controllerRef}
-        currentIndex={currentIndex}
-        numOfTracks={musicData.length}
-        rtPosition={rtPosition}
-        trackDuration={trackDuration}
-        track={musicData[currentIndex]}
-        showCtrls={showCtrls}
-        isPlaying={isPlaying}
-        handleAudioPlay={handleAudioPlay}
-      />
-      <PlayerOverlay track={musicData[currentIndex]} showCtrls={showCtrls} />
+      {currentIndex !== null && (
+        <>
+          <MusicPlayer
+            controllerRef={controllerRef}
+            currentIndex={currentIndex}
+            numOfTracks={data.length}
+            rtPosition={rtPosition}
+            trackDuration={trackDuration}
+            track={data[currentIndex]}
+            showCtrls={showCtrls}
+            handleAudioPlay={handlePlayingState}
+          />
+          <PlayerOverlay track={data[currentIndex]} showCtrls={showCtrls} />
+        </>
+      )}
     </View>
   );
 };
