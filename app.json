@@ -2,8 +2,8 @@
   "name": "Spotcloneify",
   "displayName": "Spotcloneify",
   "expo": {
-    "name": "rn-anime",
-    "slug": "rn-anime",
+    "name": "Spotcloneify",
+    "slug": "spotcloneify",
     "privacy": "public",
     "description": "A small clone of the Swedish audio streaming service Spotify.",
     "version": "1.0.0",
