@@ -7,6 +7,7 @@
     "privacy": "public",
     "description": "A small clone of the Swedish audio streaming service Spotify.",
     "version": "1.0.0",
+    "orientation": "portrait",
     "icon": "./ios/rnanime/Images.xcassets/AppIcon.appiconset/Icon-29x29@3x.png",
     "splash": {
       "image": "./ios/rnanime/Images.xcassets/SplashScreen.imageset/iphonex_splash.png",
