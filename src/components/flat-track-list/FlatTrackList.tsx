@@ -25,7 +25,7 @@ export const FlatTrackList = ({ enableScroll = true, ...props }: FTLProps) => {
   const { bottomPosition } = getAnimatedNodes(props.yOffset);
 
   const listContainerStyles = Object.assign(
-    { paddingBottom: currentIndex ? 50 : 0, borderWidth: 2, borderColor: "red" },
+    { paddingBottom: currentIndex ? 50 : 0 },
     props.contentContainerStyle
   );
 
