@@ -8,6 +8,7 @@ import { TrackDetails } from "./track-details";
 import { TrackTimedProgress } from "./track-timed-progress";
 
 import { AudioPlayer } from "@local/utils/AudioPlayer";
+
 import { styles } from "./styles";
 
 interface MPProps {

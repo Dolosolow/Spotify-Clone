@@ -1,6 +1,6 @@
 import React from "react";
 import Animated from "react-native-reanimated";
-import { FlatList } from "react-native";
+import { FlatList, Keyboard } from "react-native";
 import { useSelector } from "react-redux";
 import type { StyleProp, ViewStyle, ListRenderItem } from "react-native";
 
@@ -12,11 +12,11 @@ import { styles } from "./styles";
 interface FTLProps {
   data: any;
   yOffset: Animated.Value<number>;
-  renderItem: ListRenderItem<any> | null | undefined;
   enableScroll?: boolean;
   ListHeaderComponent?: React.ReactElement;
   ListEmptyComponent?: React.ReactElement;
   contentContainerStyle?: StyleProp<ViewStyle>;
+  renderItem: ListRenderItem<any> | null | undefined;
 }
 
 export const FlatTrackList = ({ enableScroll = true, ...props }: FTLProps) => {
@@ -25,7 +25,7 @@ export const FlatTrackList = ({ enableScroll = true, ...props }: FTLProps) => {
   const { bottomPosition } = getAnimatedNodes(props.yOffset);
 
   const listContainerStyles = Object.assign(
-    { paddingBottom: currentIndex ? 50 : 0 },
+    { paddingBottom: currentIndex ? 50 : 0, borderWidth: 2, borderColor: "red" },
     props.contentContainerStyle
   );
 
@@ -38,11 +38,12 @@ export const FlatTrackList = ({ enableScroll = true, ...props }: FTLProps) => {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={listContainerStyles}
-        keyExtractor={({ id, index }) => `${id}-${index}`}
+        keyExtractor={({ id, index }) => id}
         renderItem={props.renderItem}
         ListEmptyComponent={props.ListEmptyComponent}
         ListHeaderComponent={props.ListHeaderComponent}
         onScroll={({ nativeEvent }) => {
+          Keyboard.dismiss();
           props.yOffset.setValue(nativeEvent.contentOffset.y);
         }}
       />

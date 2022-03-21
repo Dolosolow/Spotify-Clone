@@ -9,6 +9,7 @@ export type dataTypeParams = "artist" | "track" | "playlist" | undefined;
 
 export type Store = {
   data: AllData;
+  filteredData: AllData;
   dataFiltered: "track" | "artist" | "playlist" | undefined;
   currentIndex: number | null;
   isPlaying: boolean;

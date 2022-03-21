@@ -9,36 +9,41 @@ import { FlatTrackList } from "@local/components/flat-track-list";
 import { GradientOverlay } from "@local/components/gradient-overlay";
 import { HeaderCover } from "@local/components/header-cover";
 import { ListHeaderWrapper } from "@local/components/list-header-wrapper";
-import { ShuffleMiniButton } from "@local/components/shuffle-button";
 import { TrackItem } from "@local/components/track-item";
 import { Topbar } from "@local/components/top-bar";
+import { TopbarNav } from "@local/components/top-bar-nav";
 
-import { getArtist } from "@local/store/actions";
+import { getArtist, getData } from "@local/store/actions";
 import type { Store } from "@local/store/redux_store";
 import type { RPList } from "@local/routes/routes-params-list";
 import type { Artist, Track } from "@local/types/index";
 
 import { styles } from "./styles";
 
+const yOffset = new Animated.Value<number>(0);
+
 export const ArtistProfileScreen = (props: StackScreenProps<RPList, "Artist">) => {
-  const yOffset = new Animated.Value<number>(0);
-
-  const { data: artistData } = useSelector((state: Store) => state);
+  const { filteredData: artistData } = useSelector((state: Store) => state);
   const [data, setData] = useState<Artist | null>(null);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getArtist(props.route.params.artistId));
+    if (!data) {
+      dispatch(getArtist(props.route.params.artistId));
+    }
+    return () => {
+      setData(null);
+    };
   }, []);
 
   useEffect(() => {
-    if (artistData[0].id === props.route.params.artistId) {
-      setData(artistData[0] as Artist);
+    if (artistData.length) {
+      if (artistData[0].id === props.route.params.artistId) setData(artistData[0] as Artist);
     }
   }, [artistData]);
 
   const handleItemPress = async (id: string) => {
+    dispatch(getData("track"));
     props.navigation.navigate("Modals", { screen: "Player", params: { songId: id } });
   };
 
@@ -64,7 +69,6 @@ export const ArtistProfileScreen = (props: StackScreenProps<RPList, "Artist">) =
             titleFontSize="3.6rem"
             subText="8,090,623 monthly listeners"
           />
-          <ShuffleMiniButton />
         </View>
       );
     }
@@ -73,6 +77,7 @@ export const ArtistProfileScreen = (props: StackScreenProps<RPList, "Artist">) =
   return (
     <View style={{ backgroundColor: "#121212", flex: 1 }}>
       <HeaderCover isArtistProfile coverImg={data?.cover} yOffset={yOffset} />
+      <TopbarNav refreshDataOnRedirect type="absolute" />
       <Topbar yOffset={yOffset} title={data?.name || ""} />
       <FlatTrackList
         yOffset={yOffset}

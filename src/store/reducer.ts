@@ -3,6 +3,7 @@ import type { Store, ActionType } from "./redux_store";
 
 const INITIAL_STATE: Store = {
   data: [],
+  filteredData: [],
   dataFiltered: undefined,
   currentIndex: null,
   isPlaying: false,
@@ -21,10 +22,14 @@ export const rootReducer = (state: Store = INITIAL_STATE, action: ActionType) =>
       const artistId = action.payload;
       const artistData = getDataByType("artist", artistId);
 
-      return {
-        ...state,
-        data: [...artistData],
-      };
+      if (state.data[0].name !== artistData[0].name) {
+        return {
+          ...state,
+          filteredData: [...artistData],
+        };
+      }
+
+      return state;
     case "SET_CURRENT_INDEX":
       return {
         ...state,

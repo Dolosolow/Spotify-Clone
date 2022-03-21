@@ -13,36 +13,18 @@ import { getData } from "@local/store/actions";
 import type { RPList } from "@local/routes/routes-params-list";
 import type { Store } from "@local/store/redux_store";
 import type { AllData } from "@local/types/index";
+
 import { styles } from "./styles";
 
+const yOffset = new Animated.Value<number>(0);
+
 export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResults">) => {
-  const yOffset = new Animated.Value<number>(0);
   const { data } = useSelector((state: Store) => state);
   const dispatch = useDispatch();
 
   const [term, setTerm] = useState("");
   const [allData, setAllData] = useState<AllData>([]);
   const [filteredData, setFilteredData] = useState<any>([]);
-
-  useEffect(() => {
-    dispatch(getData());
-  }, []);
-
-  useEffect(() => {
-    setAllData(data);
-  }, [data]);
-
-  useEffect(() => {
-    const results: any[] = [];
-
-    if (term.length) {
-      results.push(
-        ...allData.filter((track) => track.name.toLowerCase().includes(term.toLowerCase()))
-      );
-    }
-
-    setFilteredData(results);
-  }, [term]);
 
   const handleCancelBtn = () => {
     setTerm("");
@@ -53,7 +35,7 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
     if (type === "artist") {
       props.navigation.navigate("Artist", { artistId: id });
     } else {
-      props.navigation.navigate("Player", { songId: id });
+      props.navigation.navigate("Player", { songId: id, qplayer: false });
     }
   };
 
@@ -75,6 +57,26 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
     }
   };
 
+  useEffect(() => {
+    dispatch(getData());
+  }, []);
+
+  useEffect(() => {
+    setAllData(data);
+  }, [data]);
+
+  useEffect(() => {
+    const results: any[] = [];
+
+    if (term.length) {
+      results.push(
+        ...allData.filter((track) => track.name.toLowerCase().includes(term.toLowerCase()))
+      );
+    }
+
+    setFilteredData(results);
+  }, [term]);
+
   return (
     <View style={styles.searchResultsContainer}>
       <SearchInput
@@ -86,28 +88,33 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
       <FlatTrackList
         data={{ list: filteredData as AllData }}
         yOffset={yOffset}
-        enableScroll={allData.length > 0}
+        enableScroll={filteredData.length > 0}
         contentContainerStyle={styles.searchResultsListContainer}
         ListEmptyComponent={renderEmptyListMessage()}
         renderItem={({ item }) => {
           if (item.type === "track") {
             return (
-              <SearchItem
-                type="song"
-                title={item.name}
-                artists={item.artist}
-                onItemPress={() => handleItemPress(item.id, "song")}
-              />
+              <View style={{ flexDirection: "row" }}>
+                <SearchItem
+                  type="song"
+                  title={item.name}
+                  artists={item.artist}
+                  coverImg={item.cover}
+                  onItemPress={() => handleItemPress(item.id, "song")}
+                />
+              </View>
             );
           } else {
             return (
-              <SearchItem
-                type="artist"
-                title={item.name}
-                artists={[item.name]}
-                coverImg={item.cover}
-                onItemPress={() => handleItemPress(item.id, "artist")}
-              />
+              <View style={{ flexDirection: "row" }}>
+                <SearchItem
+                  type="artist"
+                  title={item.name}
+                  artists={[item.name]}
+                  coverImg={item.cover}
+                  onItemPress={() => handleItemPress(item.id, "artist")}
+                />
+              </View>
             );
           }
         }}

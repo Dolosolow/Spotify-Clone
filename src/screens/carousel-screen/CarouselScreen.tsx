@@ -9,7 +9,6 @@ import { MusicPlayer } from "./music-player";
 
 import { AudioPlayer } from "@local/utils/AudioPlayer";
 import { setCurrentIndex, pausePlayAudio } from "@local/store/actions";
-
 import type { RPList } from "@local/routes/routes-params-list";
 import type { Store } from "@local/store/redux_store";
 import type { Track } from "@local/types/index";
@@ -59,8 +58,10 @@ export const CarouselScreen = ({ route }: StackScreenProps<RPList, "Player">) =>
   };
 
   useEffect(() => {
-    dispatch(setCurrentIndex(Number(route.params.songId)));
-  }, []);
+    if (Number(route.params.songId) !== currentIndex) {
+      dispatch(setCurrentIndex(Number(route.params.songId)));
+    }
+  }, [data]);
 
   useEffect(() => {
     if (audioPlayer.audioPlayer._loaded) {

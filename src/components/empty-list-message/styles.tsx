@@ -4,6 +4,7 @@ export const styles = EStyleSheet.create({
   emptyListMsg: {
     backgroundColor: "#121212",
     flex: 1,
+    maxHeight: "100%",
     paddingBottom: "30rem",
     alignItems: "center",
     justifyContent: "center",
