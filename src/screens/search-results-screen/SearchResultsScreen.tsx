@@ -9,7 +9,7 @@ import { FlatTrackList } from "@local/components/flat-track-list";
 import { EmptyListMessage } from "@local/components/empty-list-message";
 import { SearchItem } from "./search-item";
 
-import { getData } from "@local/store/actions";
+import { setCurrentIndex } from "@local/store/actions";
 import type { RPList } from "@local/routes/routes-params-list";
 import type { Store } from "@local/store/redux_store";
 import type { AllData } from "@local/types/index";
@@ -17,25 +17,32 @@ import type { AllData } from "@local/types/index";
 import { styles } from "./styles";
 
 const yOffset = new Animated.Value<number>(0);
+const player = AudioPlayer.getInstance();
+
+import { useDataToRouteHandler } from "../../hooks/useDataToRouteHandler";
+import { AudioPlayer } from "@local/utils/AudioPlayer";
 
 export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResults">) => {
   const { data } = useSelector((state: Store) => state);
   const dispatch = useDispatch();
+  useDataToRouteHandler("all");
 
   const [term, setTerm] = useState("");
   const [allData, setAllData] = useState<AllData>([]);
-  const [filteredData, setFilteredData] = useState<any>([]);
 
   const handleCancelBtn = () => {
     setTerm("");
+    setAllData([]);
     props.navigation.goBack();
   };
 
-  const handleItemPress = (id: string, type: "song" | "artist") => {
+  const handleItemPress = async (track: any, type: "song" | "artist") => {
+    console.log("track-clicked", track);
     if (type === "artist") {
-      props.navigation.navigate("Artist", { artistId: id });
+      props.navigation.navigate("Artist", { artistId: track.id });
     } else {
-      props.navigation.navigate("Player", { songId: id, qplayer: false });
+      dispatch(setCurrentIndex(Number(track.id)));
+      await player.playNewAudio(track.mp3);
     }
   };
 
@@ -58,23 +65,15 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
   };
 
   useEffect(() => {
-    dispatch(getData());
-  }, []);
-
-  useEffect(() => {
-    setAllData(data);
-  }, [data]);
-
-  useEffect(() => {
     const results: any[] = [];
 
     if (term.length) {
       results.push(
-        ...allData.filter((track) => track.name.toLowerCase().includes(term.toLowerCase()))
+        ...data.filter((track) => track.name.toLowerCase().includes(term.toLowerCase()))
       );
     }
 
-    setFilteredData(results);
+    setAllData(results);
   }, [term]);
 
   return (
@@ -86,9 +85,9 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
         onCancel={handleCancelBtn}
       />
       <FlatTrackList
-        data={{ list: filteredData as AllData }}
+        data={{ list: allData as AllData }}
         yOffset={yOffset}
-        enableScroll={filteredData.length > 0}
+        enableScroll={allData.length > 0}
         contentContainerStyle={styles.searchResultsListContainer}
         ListEmptyComponent={renderEmptyListMessage()}
         renderItem={({ item }) => {
@@ -100,7 +99,7 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
                   title={item.name}
                   artists={item.artist}
                   coverImg={item.cover}
-                  onItemPress={() => handleItemPress(item.id, "song")}
+                  onItemPress={() => handleItemPress(item, "song")}
                 />
               </View>
             );
@@ -112,7 +111,7 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
                   title={item.name}
                   artists={[item.name]}
                   coverImg={item.cover}
-                  onItemPress={() => handleItemPress(item.id, "artist")}
+                  onItemPress={() => handleItemPress(item, "artist")}
                 />
               </View>
             );

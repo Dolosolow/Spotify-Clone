@@ -3,6 +3,7 @@ export type Track = {
   type: "artist" | "track" | "playlist";
   name: string;
   artist: string[];
+  artistCover: any;
   cover: any;
   vid: NodeRequire;
   mp3: NodeRequire;

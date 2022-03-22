@@ -12,9 +12,12 @@ import type { Track } from "@local/types/index";
 
 import { styles } from "./styles";
 
+import { useDataToRouteHandler } from "../../hooks/useDataToRouteHandler";
+
 export const LibraryScreen = ({ navigation }: StackScreenProps<RPList, "Home">) => {
   const { data } = useSelector((state: Store) => state);
   const dispatch = useDispatch();
+  useDataToRouteHandler("track");
 
   useEffect(() => {
     dispatch(getData("track"));

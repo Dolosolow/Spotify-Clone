@@ -16,6 +16,7 @@ module.exports = function (api) {
             "@local/store": "./src/store",
             "@local/types": "./src/types",
             "@local/utils": "./src/utils",
+            "@local/hooks": "./src/hooks",
           },
         },
       ],

@@ -6,7 +6,7 @@ const data: Artist[] = [
     type: "artist",
     name: "Jhay Cortez",
     cover: require("../images/artists/jhaycortez.jpeg"),
-    songs: ["11", "5"],
+    songs: ["13", "7"],
   },
   {
     id: "a1",
@@ -20,7 +20,7 @@ const data: Artist[] = [
     type: "artist",
     name: "Bad Bunny",
     cover: require("../images/artists/badbunny.jpeg"),
-    songs: ["2", "3", "4", "11"],
+    songs: ["2", "3", "4", "11", "7"],
   },
   {
     id: "a3",

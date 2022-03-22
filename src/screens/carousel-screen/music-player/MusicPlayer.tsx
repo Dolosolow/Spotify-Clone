@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image } from "react-native";
+import { View } from "react-native";
 import type { FlatList } from "react-native";
 
 import { TopbarNav } from "@local/components/top-bar-nav";
@@ -10,6 +10,8 @@ import { TrackTimedProgress } from "./track-timed-progress";
 import { AudioPlayer } from "@local/utils/AudioPlayer";
 
 import { styles } from "./styles";
+
+import { OverlayArtistCard } from "./overlay-artist-card";
 
 interface MPProps {
   controllerRef: React.RefObject<FlatList<any>>;
@@ -74,12 +76,7 @@ export const MusicPlayer = (props: MPProps) => {
           />
         </View>
       </View>
-      {!props.showCtrls && (
-        <View style={styles.overlayContainer}>
-          <Image source={props.track.cover} style={styles.overlayCoverImg} />
-          <Text style={styles.overlayText}>by {props.track.artist[0]}</Text>
-        </View>
-      )}
+      {!props.showCtrls && <OverlayArtistCard track={props.track} />}
     </>
   );
 };

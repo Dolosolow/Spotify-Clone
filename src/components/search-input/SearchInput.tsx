@@ -12,6 +12,7 @@ interface SIProps {
   focusOnRender?: boolean;
   yOffset?: Animated.Adaptable<number>;
   onChangeText: (text: string) => void;
+  onFocus?: () => void;
   onCancel?: () => void;
 }
 
@@ -29,7 +30,16 @@ export const SearchInput = ({ focusOnRender = false, ...props }: SIProps) => {
   const handleKeyboardDismiss = () => {
     handleTextChange("");
     setHideCancelBtn(true);
+
     Keyboard.dismiss();
+  };
+
+  const handleInputFocus = (hide: boolean) => {
+    setHideCancelBtn(hide);
+
+    if (props.onFocus && !hide) {
+      props.onFocus();
+    }
   };
 
   const handleCancelBtnPress = () => {
@@ -55,8 +65,8 @@ export const SearchInput = ({ focusOnRender = false, ...props }: SIProps) => {
         placeholder={props.placeholder}
         value={inputValue}
         onChangeText={handleTextChange}
-        onFocus={() => setHideCancelBtn(false)}
-        onBlur={() => inputValue.length === 0 && setHideCancelBtn(true)}
+        onFocus={() => handleInputFocus(false)}
+        onBlur={() => inputValue.length === 0 && handleInputFocus(true)}
       />
       {inputValue.length > 0 && (
         <TouchableWithoutFeedback onPress={handleKeyboardDismiss}>

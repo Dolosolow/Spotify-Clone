@@ -1,0 +1,1 @@
+export { OverlayArtistCard } from "./OverlayArtistCard";

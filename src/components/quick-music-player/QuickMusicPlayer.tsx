@@ -1,43 +1,30 @@
 import React, { useEffect, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { View, Text, TouchableWithoutFeedback } from "react-native";
 
-import { AudioPlayer } from "@local/utils/AudioPlayer";
-import { pausePlayAudio } from "@local/store/actions";
+import { RedirectButton } from "@local/components/redirect-button";
+
+import { usePlayerControl } from "@local/hooks/usePlayerControl";
 import type { Store } from "@local/store/redux_store";
 import type { Track } from "@local/types/index";
 
 import { styles } from "./styles";
 
-import { RedirectButton } from "@local/components/redirect-button";
-
-const audioPlayer = AudioPlayer.getInstance();
-
 export const QuickMusicPlayer = () => {
   const { currentIndex, isPlaying, data } = useSelector((store: Store) => store);
-  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const player = usePlayerControl();
 
   const [track, setTrack] = useState<Track | null>(null);
-
-  const handlePlayingState = async () => {
-    if (isPlaying) {
-      dispatch(pausePlayAudio(false));
-      await audioPlayer.pauseAudio();
-    } else {
-      dispatch(pausePlayAudio(true));
-      await audioPlayer.playAudio(true);
-    }
-  };
 
   useEffect(() => {
     const foundTrack = data.find((track) => track.id === currentIndex?.toString());
     setTrack(foundTrack as Track);
   }, [currentIndex]);
 
-  return currentIndex && track ? (
+  return currentIndex !== null && track ? (
     <View style={styles.playerContainer}>
       <RedirectButton chevronDirection="up" />
       <TouchableWithoutFeedback
@@ -53,7 +40,7 @@ export const QuickMusicPlayer = () => {
           <Text style={styles.trackSubTitle}>{track.artist.join(", ")}</Text>
         </View>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={handlePlayingState}>
+      <TouchableWithoutFeedback onPress={player.setPlayState}>
         <Ionicons
           name={isPlaying ? "pause-circle-outline" : "play-circle-outline"}
           size={45}

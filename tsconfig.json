@@ -8,9 +8,10 @@
       "@local/routes/*": ["./src/routes/*"],
       "@local/screens/*": ["./src/screens/*"],
       "@local/utils/*": ["./src/utils/*"],
-      "@local/assets/*": ["./assets/*"],
+      "@local/hooks/*": ["./src/hooks/*"],
       "@local/types/*": ["./src/types/*"],
-      "@local/store/*": ["./src/store/*"]
+      "@local/store/*": ["./src/store/*"],
+      "@local/assets/*": ["./assets/*"]
     }
   }
 }

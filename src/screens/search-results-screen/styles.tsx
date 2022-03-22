@@ -11,8 +11,8 @@ export const styles = EStyleSheet.create({
     paddingTop: "6rem",
   },
   searchResultsListContainer: {
-    height: "100%",
     backgroundColor: "#121212",
-    marginTop: "2rem",
+    paddingTop: "1.5rem",
+    minHeight: height,
   },
 });

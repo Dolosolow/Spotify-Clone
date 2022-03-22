@@ -22,10 +22,14 @@ export const rootReducer = (state: Store = INITIAL_STATE, action: ActionType) =>
       const artistId = action.payload;
       const artistData = getDataByType("artist", artistId);
 
-      if (state.data[0].name !== artistData[0].name) {
+      console.log("state.data[0].name", state.filteredData);
+      console.log("artistData[0].name", artistData[0].name);
+
+      if (state.filteredData.length === 0 || state.filteredData[0].name !== artistData[0].name) {
         return {
           ...state,
           filteredData: [...artistData],
+          dataFiltered: "artist",
         };
       }
 
@@ -33,6 +37,7 @@ export const rootReducer = (state: Store = INITIAL_STATE, action: ActionType) =>
     case "SET_CURRENT_INDEX":
       return {
         ...state,
+        isPlaying: true,
         currentIndex: action.payload,
       };
     case "PAUSE_PLAY_TRACK":

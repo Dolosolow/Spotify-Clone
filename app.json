@@ -5,6 +5,7 @@
     "name": "rn-anime",
     "slug": "rn-anime",
     "privacy": "public",
+    "orientation": "portrait",
     "description": "A small clone of the Swedish audio streaming service Spotify.",
     "version": "1.0.0",
     "icon": "./ios/rnanime/Images.xcassets/AppIcon.appiconset/Icon-29x29@3x.png",
