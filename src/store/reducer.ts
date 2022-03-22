@@ -22,9 +22,6 @@ export const rootReducer = (state: Store = INITIAL_STATE, action: ActionType) =>
       const artistId = action.payload;
       const artistData = getDataByType("artist", artistId);
 
-      console.log("state.data[0].name", state.filteredData);
-      console.log("artistData[0].name", artistData[0].name);
-
       if (state.filteredData.length === 0 || state.filteredData[0].name !== artistData[0].name) {
         return {
           ...state,

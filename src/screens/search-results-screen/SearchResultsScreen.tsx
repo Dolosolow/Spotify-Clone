@@ -37,7 +37,6 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
   };
 
   const handleItemPress = async (track: any, type: "song" | "artist") => {
-    console.log("track-clicked", track);
     if (type === "artist") {
       props.navigation.navigate("Artist", { artistId: track.id });
     } else {

@@ -38,8 +38,6 @@ export const ArtistProfileScreen = (props: StackScreenProps<RPList, "Artist">) =
 
   useEffect(() => {
     if (artistData.length) {
-      console.log("data-id", artistData[0].id);
-      console.log("param-id", props.route.params.artistId);
       if (artistData[0].id === props.route.params.artistId) setData(artistData[0] as Artist);
     }
   }, [artistData]);
