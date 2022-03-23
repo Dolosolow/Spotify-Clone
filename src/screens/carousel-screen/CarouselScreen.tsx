@@ -16,7 +16,7 @@ import type { Store } from "@local/store/redux_store";
 const { width } = Dimensions.get("screen");
 
 export const CarouselScreen = ({ route }: StackScreenProps<RPList, "Player">) => {
-  const { currentIndex, data } = useSelector((store: Store) => store);
+  const { currentIndex, filteredData } = useSelector((store: Store) => store);
   const dispatch = useDispatch();
   const player = usePlayerControl(route.params.qplayer);
   useDataToRouteHandler("track");
@@ -38,17 +38,17 @@ export const CarouselScreen = ({ route }: StackScreenProps<RPList, "Player">) =>
   };
 
   useEffect(() => {
-    if (currentIndex !== Number(route.params.songId)) {
+    if (currentIndex !== null && currentIndex !== Number(route.params.songId)) {
       dispatch(setCurrentIndex(Number(route.params.songId)));
     }
-  }, [data]);
+  }, [filteredData]);
 
   return (
     <View style={{ backgroundColor: "#252525" }}>
       <FlatList
         horizontal
         ref={controllerRef}
-        data={data}
+        data={filteredData}
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => <Card vid={item.vid} onPress={handleControlVisiability} />}
         snapToAlignment="center"
@@ -67,10 +67,10 @@ export const CarouselScreen = ({ route }: StackScreenProps<RPList, "Player">) =>
         <MusicPlayer
           controllerRef={controllerRef}
           currentIndex={currentIndex}
-          numOfTracks={data.length}
+          numOfTracks={filteredData.length}
           rtPosition={player.rtPosition}
           trackDuration={player.trackDuration}
-          track={data[currentIndex]}
+          track={filteredData[currentIndex]}
           showCtrls={showCtrls}
           handleAudioPlay={player.setPlayState}
         />

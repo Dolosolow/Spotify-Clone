@@ -9,6 +9,8 @@ export const styles = EStyleSheet.create({
     height: "100%",
     width: width,
     paddingTop: "6rem",
+    borderWidth: 2,
+    borderColor: "red",
   },
   searchResultsListContainer: {
     backgroundColor: "#121212",

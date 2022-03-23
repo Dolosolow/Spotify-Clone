@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Animated from "react-native-reanimated";
 import { View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,7 +12,7 @@ import { SearchItem } from "./search-item";
 import { setCurrentIndex } from "@local/store/actions";
 import type { RPList } from "@local/routes/routes-params-list";
 import type { Store } from "@local/store/redux_store";
-import type { AllData } from "@local/types/index";
+import type { AllData, Track } from "@local/types/index";
 
 import { styles } from "./styles";
 
@@ -63,30 +63,42 @@ export const SearchResultsScreen = (props: StackScreenProps<RPList, "SearchResul
     }
   };
 
-  useEffect(() => {
-    const results: any[] = [];
+  const handleTermSearch = (text: string) => {
+    let filteredData = data;
+    let filteredTempData = [];
 
-    if (term.length) {
-      results.push(
-        ...data.filter((track) => track.name.toLowerCase().includes(term.toLowerCase()))
-      );
-    }
+    filteredTempData = data.filter((item) => {
+      if (item.type === "artist") {
+        return item.name.toLowerCase().includes(text.toLowerCase());
+      }
+    });
 
-    setAllData(results);
-  }, [term]);
+    filteredData = filteredTempData;
+
+    filteredTempData = data.filter((item) => {
+      if (item.type === "track") {
+        return (item as Track).artist.join(" ").toLowerCase().includes(text.toLowerCase());
+      }
+    });
+
+    filteredData.push(...filteredTempData);
+
+    setTerm(text);
+    setAllData(filteredData);
+  };
 
   return (
     <View style={styles.searchResultsContainer}>
       <SearchInput
         focusOnRender
         placeholder="Find in liked songs"
-        onChangeText={(text) => setTerm(text)}
+        onChangeText={handleTermSearch}
         onCancel={handleCancelBtn}
       />
       <FlatTrackList
         data={{ list: allData as AllData }}
         yOffset={yOffset}
-        enableScroll={allData.length > 0}
+        enableScroll={allData.length > 9}
         contentContainerStyle={styles.searchResultsListContainer}
         ListEmptyComponent={renderEmptyListMessage()}
         renderItem={({ item }) => {

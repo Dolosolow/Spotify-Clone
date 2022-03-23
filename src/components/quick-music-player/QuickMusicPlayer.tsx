@@ -31,7 +31,7 @@ export const QuickMusicPlayer = () => {
         onPress={() =>
           navigation.navigate("Modals", {
             screen: "Player",
-            params: { songId: currentIndex.toString(), qplayer: true },
+            params: { songId: track.id },
           })
         }
       >

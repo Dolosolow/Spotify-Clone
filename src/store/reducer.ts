@@ -13,6 +13,13 @@ export const rootReducer = (state: Store = INITIAL_STATE, action: ActionType) =>
   switch (action.type) {
     case "GET_DATA":
       const fetchedData = getDataByType(action.payload);
+      if (action.payload) {
+        return {
+          ...state,
+          filteredData: fetchedData,
+          dataFiltered: action.payload,
+        };
+      }
       return {
         ...state,
         data: fetchedData,

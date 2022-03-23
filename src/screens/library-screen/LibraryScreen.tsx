@@ -15,7 +15,7 @@ import { styles } from "./styles";
 import { useDataToRouteHandler } from "../../hooks/useDataToRouteHandler";
 
 export const LibraryScreen = ({ navigation }: StackScreenProps<RPList, "Home">) => {
-  const { data } = useSelector((state: Store) => state);
+  const { filteredData } = useSelector((state: Store) => state);
   const dispatch = useDispatch();
   useDataToRouteHandler("track");
 
@@ -25,7 +25,7 @@ export const LibraryScreen = ({ navigation }: StackScreenProps<RPList, "Home">) 
 
   return (
     <View style={styles.container}>
-      <PlaylistScreen navigation={navigation} data={data as Track[]} />
+      <PlaylistScreen navigation={navigation} data={filteredData as Track[]} />
     </View>
   );
 };
